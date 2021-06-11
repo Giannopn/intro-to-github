@@ -1,0 +1,62 @@
+import random
+
+answers = "python", "java", "kotlin", "javascript"
+correct_letters = set()
+said_letters = set()
+i = 0
+print("H A N G M A N")
+print()
+answer = random.choice(answers)
+start = ''
+
+while start != 'play':
+    start = input('Type "play" to play the game, "exit" to quit:')
+
+def show_question():
+    global answer
+    global correct_letters
+    for x in answer:
+        if x in correct_letters:
+            print(x, end="")
+        else:
+            print("-", end="")
+    else:
+        print()
+
+
+def is_win():
+    global answer
+    global correct_letters
+    return correct_letters == set(answer)
+
+
+while i < 8:
+    print()
+    show_question()
+    letter = input("Input a letter: ")
+    if len(letter) == 1:
+        if letter == letter.upper():
+            print("Please enter a lowercase English letter")
+            continue
+    else:
+        print('You should input a single letter')
+        continue
+    
+    if letter in answer:
+        correct_letters.add(letter)
+        if letter in said_letters:
+            print("You've already guessed this letter")
+        said_letters.add(letter)
+    else:
+        if letter in said_letters:
+            print("You've already guessed this letter")
+        else:
+            print("That letter doesn't appear in the word")
+            said_letters.add(letter)
+            i = i + 1
+    if is_win():
+        print('You guessed the word!')
+        print("You survived!")
+        break
+else:
+    print('You lost!')
