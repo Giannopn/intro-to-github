@@ -1,0 +1,89 @@
+# Initializing Variables
+user_input = list("_________")
+cells = list()
+change_index = 0
+turn = "X"
+end_game = False
+game_counter = 0
+
+
+# Functions Defining
+def display():
+    print("---------")
+    print(f"| {cells[0][2]} {cells[1][2]} {cells[2][2]} |")
+    print(f"| {cells[3][2]} {cells[4][2]} {cells[5][2]} |")
+    print(f"| {cells[6][2]} {cells[7][2]} {cells[8][2]} |")
+    print("---------")
+
+
+def input_checker():
+    check = False
+    while not check:
+        cord = input("Enter the coordinates: ").split()
+        if len(cord) != 2 or cord == [] or not cord[0].isnumeric() or not cord[1].isnumeric():
+            print("You should enter numbers!")
+            continue
+        else:
+            y_input = int(cord[0])
+            x_input = int(cord[1])
+            if not 0 < y_input < 4 or not 0 < x_input < 4:
+                print("Coordinates should be from 1 to 3!")
+                continue
+            else:
+                for i in range(9):
+                    if cells[i][0] == y_input and cells[i][1] == x_input:
+                        global change_index
+                        change_index = i
+                        if cells[i][2] == "X" or cells[i][2] == "O":
+                            print("This cell is occupied! Choose another one!")
+                        else:
+                            check = True
+
+
+def layout_change():
+    if turn == "X":
+        cells[change_index][2] = "X"
+    else:
+        cells[change_index][2] = "O"
+
+
+def win_check():
+    return (cells[0][2] == cells[1][2] == cells[2][2] != "_" or  # raw1
+            cells[3][2] == cells[4][2] == cells[5][2] != "_" or  # raw2
+            cells[6][2] == cells[7][2] == cells[8][2] != "_" or  # raw3
+            cells[0][2] == cells[3][2] == cells[6][2] != "_" or  # column1
+            cells[1][2] == cells[4][2] == cells[7][2] != "_" or  # column2
+            cells[2][2] == cells[5][2] == cells[8][2] != "_" or  # column3
+            cells[0][2] == cells[4][2] == cells[8][2] != "_" or  # diagonal left
+            cells[2][2] == cells[4][2] == cells[6][2] != "_")  # diagonal right
+
+
+# Initializing Game
+x = 1
+y = 1
+for char in user_input:
+    cells.append([y, x, char])
+    if x < 3:
+        x += 1
+    else:
+        y += 1
+        x = 1
+
+display()  # First print
+
+# Starting Game
+while not end_game:
+    input_checker()
+    game_counter += 1
+    layout_change()
+    display()
+    if win_check():
+        print(turn + " wins")
+        break
+    elif game_counter >= 9:
+        print("Draw")
+        break
+    if turn == "X":
+        turn = "O"
+    else:
+        turn = "X"
